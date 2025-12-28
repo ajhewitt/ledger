@@ -9,7 +9,7 @@ def generate_decoherence_plot():
     # Data from verified runs
     results = {
         "P1": {"z": 1100, "sig": 15.0, "label": "Primordial (CMB)"},
-        "P6": {"z": 4.5, "sig": 271.7, "label": "Early Structure (JWST)"},
+        "P6": {"z": 4.5, "sig": 83.88, "label": "Early Structure (JWST)"},
         "P5": {"z": 0.7, "sig": 1.43, "label": "Late Structure (DESI)"}
     }
 
@@ -30,8 +30,8 @@ def generate_decoherence_plot():
     
     # Explicitly set wide limits to prevent label truncation
     # We provide a 5x buffer on the redshift ends and a 10x buffer on significance
-    ax.set_xlim(5000, 0.2) # Inverted x-axis: past to present
-    ax.set_ylim(0.1, 2000) # Vertical room for P6 at 271 sigma
+    ax.set_xlim(10000, 0.1) # Inverted x-axis: past to present
+    ax.set_ylim(0.5, 500) # Vertical room for P6 at 271 sigma
 
     ax.set_title("The Cosmic Ledger: Context-Coupling Decoherence", fontsize=16, pad=30)
     ax.set_xlabel("Redshift (z) [Temporal Distance from Observer]", fontsize=13)
