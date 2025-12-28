@@ -1,0 +1,79 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, geometry}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\title{Program for Testing Target Selection Commutativity (P5)}
+\author{}
+\date{December 2025}
+
+\begin{document}
+\maketitle
+
+\section*{Goal}
+To determine if the cosmological inference derived from galaxy clustering is invariant under the ordering of target selection and fiber assignment. In the Causal Evolution (CE) framework, the act of "picking" a target is an event that updates the state of the dependency network. We define the commutator statistic:
+\begin{align}
+\hat{C} = \mathcal{E}[\text{Clustering} \circ \text{Selection}] - \mathcal{E}[\text{Selection} \circ \text{Clustering}]
+\end{align}
+Under $\Lambda$CDM, $\hat{C}$ should be consistent with zero (within shot noise). A non-zero $\hat{C}$ suggests that the "Past" (galaxy distribution) is being shaped by the "Context" (survey ledger).
+
+\section*{0. Pre-registration}
+\begin{itemize}
+\item Data: DESI (Dark Energy Spectroscopic Instrument) Year 1/Year 3 data releases.
+\item Ledger: The \texttt{altmtl} (Alternative Merged Target List) suite.
+\item Statistic: Monopole and quadrupole of the two-point correlation function $\xi(s)$.
+\item Scale: $20 < s < 150 \, h^{-1}\text{Mpc}$ (Linear to quasi-linear regime).
+\end{itemize}
+
+\section*{1. Data Products}
+\begin{itemize}
+\item \textbf{Primary:} DESI LRG (Luminous Red Galaxy) and ELG (Emission Line Galaxy) catalogs.
+\item \textbf{Context Ledger:} 128+ realizations of the DESI \texttt{altmtl} fiber assignment pipeline.
+\item \textbf{Simulations:} AbacusSummit N-body simulations processed through the fiber-assignment emulator.
+\end{itemize}
+
+\section*{2. The Commutator Metric}
+We define the test as a comparison between the baseline survey and the ensemble of alternative ledgers.
+\begin{enumerate}
+\item Let $\theta_{base}$ be the cosmological parameters ($\Omega_m, f\sigma_8$) derived from the primary survey.
+\item Let $\theta_{alt, i}$ be the parameters derived from the $i$-th \texttt{altmtl} realization.
+\item The commutator shift is defined as:
+\begin{align}
+\Delta \theta = \theta_{base} - \frac{1}{N} \sum_{i=1}^{N} \theta_{alt, i}
+\end{align}
+\end{enumerate}
+
+\section*{3. Fiber Assignment Context}
+The "Context" in P5 is the physical limitation of the fiber positioners on the focal plane. 
+\begin{itemize}
+\item \textbf{Fiber Collisions:} Two galaxies closer than the fiber diameter cannot both be observed in one pass.
+\item \textbf{Priority Logic:} The ledger decides which galaxy gets the fiber based on a pre-defined "cost" function.
+\item \textbf{PbC Hypothesis:} If $\Delta \theta \neq 0$, the priority logic is effectively "writing" the clustering signal rather than just sampling it.
+\end{itemize}
+
+
+
+\section*{4. Methodology}
+\begin{enumerate}
+\item \textbf{Clustering Analysis:} Compute $\xi_\ell(s)$ for each \texttt{altmtl} realization using the Landy-Szalay estimator.
+\item \textbf{Covariance Estimation:} Use the variance across realizations to define the context-dependent covariance matrix $\mathbf{C}_{ctx}$.
+\item \textbf{Likelihood Surface:} Compare the likelihood peaks of the baseline vs. the "average" ledger.
+\end{enumerate}
+
+\section*{5. Systematics Triage}
+\begin{itemize}
+\item \textbf{Angular Selection:} Check if the shift correlates with the survey footprint boundaries.
+\item \textbf{Redshift Evolution:} Test if $\hat{C}$ grows at lower redshifts (where the "dependency network" is more complex).
+\item \textbf{Shot Noise Calibration:} Use "shuffled" catalogs where fiber positions are randomized (should result in $\hat{C} = 0$).
+\end{itemize}
+
+\section*{6. Expected Sensitivity}
+DESI's volume is sufficient to detect "bookkeeping coupling" at the level of $\lambda \sim 10^{-3}$ in the growth rate of structure $f\sigma_8$.
+
+\section*{7. Stop-loss Rules}
+\begin{itemize}
+\item If $\Delta \theta$ is within the $1\sigma$ scatter of the AbacusSummit mocks, the null hypothesis ($\Lambda$CDM) is retained.
+\item If the shift is only present in ELGs but not LRGs, investigate species-specific selection bias.
+\end{itemize}
+
+\end{document}

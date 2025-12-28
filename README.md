@@ -28,6 +28,11 @@ This repository targets the diagnostics defined in *Parochial by Construction: D
 * **P5 (Target Selection Commutator):** Uses DESI `altmtl` realizations to test if target selection bookkeeping commutes with clustering inference.
 * **P6 (Field Variance):** (Upcoming) Tests for context-dependent variance in JWST galaxy number counts.
 
+### 2.1 Latest Audit Results (2025-12-28)
+* **P5 (DESI DR1 iron):** Commutator shift $\Delta z \approx -4.7 \times 10^{-4}$ detected. 
+  * Context Tension: 0.6594 (High).
+  * Status: **INVESTIGATE** (Potential Context-Coupling).
+
 ## 3. Repository Structure
 
 ```text
