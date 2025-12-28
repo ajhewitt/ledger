@@ -16,6 +16,10 @@ Standard cosmological inference (Temporal Evolution, or **TE**) assumes the past
 
 If the universe behaves according to standard General Relativity, the Record and the Context should be statistically independent ($S_\gamma \approx 0$). If Causal Evolution is true, the Record will effectively "phase-lock" to the Context to minimize the computational cost of the history, producing a non-zero coupling signal.
 
+### 1.1 Historical Motivation: The "Axis of Evil"
+
+The PbC framework provides a theoretical basis for long-standing CMB anomalies.  The observed alignment of the quadrupole ($\ell=2$) and octopole ($\ell=3$) with the solar system's Ecliptic plane—often called the "Axis of Evil"—is interpreted here not as a fluke, but as a primary signal of **Phase-Locking (P1)** between the primordial record and the observer's scan context.
+
 ## 2. Research Goals
 
 This repository targets the diagnostics defined in *Parochial by Construction: Dual Constructions for Cosmological Inference* [Draft, 2025].
