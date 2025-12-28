@@ -49,6 +49,7 @@ ledger/
 ├── tests/
 │   └── science/            # Physics validation (Null tests, Symmetry checks)
 └── pyproject.toml          # Package definition and dependencies
+```
 
 ## 4. Installation
 **Prerequisites:** Python 3.9+
@@ -108,6 +109,7 @@ python scripts/01_context_builder.py --nside 2048
 
 # Step 2: Audit the Record
 python scripts/02_planck_p1_audit.py --nside 2048
+```
 
 ## 7. Validation & Safety
 
