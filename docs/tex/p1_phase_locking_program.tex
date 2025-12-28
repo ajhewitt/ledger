@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, geometry}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\title{Program for Testing Polarization Phase-Locking (P1)}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Goal}
+Test whether the phases of primordial CMB polarization modes (TE/EE) are coupled to the observational context. Define the phase alignment statistic
+\begin{align}
+S_\gamma \equiv \frac{\sum_{\ell,m} w_{\ell m} \cos(\phi_{\ell m}^{\rm CMB} - \phi_{\ell m}^{\rm ctx})}{\sum_{\ell,m} w_{\ell m}},
+\end{align}
+where $\phi$ denotes the phase of the spherical harmonic coefficient $a_{\ell m}$ and weights $w_{\ell m}$ are determined by the power of the context template. $S_\gamma$ should vanish under $\Lambda$CDM (random phases) but deviates proportionally to the coupling strength $\lambda_\gamma$ in the Causal Evolution (CE) framework.
+
+\section*{0. Pre-registration}
+\begin{itemize}
+\item Masks: Planck PR4 ``Common'' mask for Temperature/Polarization analysis.
+\item Multipoles: Low-$\ell$ focus, $2 \leq \ell \leq 20$, where the scan strategy geometry is most coherent.
+\item Frequency: SMICA (PR4/NPIPE) as primary; SEVEM as cross-check.
+\item Estimator: Direct harmonic phase extraction from $a_{\ell m}^{E}$.
+\item Context template: Ecliptic-aligned low-$\ell$ basis ($T_{\rm ctx}$), pre-registered and fixed.
+\item Output: Single $S_\gamma$ statistic per mode (TE, EE) and combined.
+\end{itemize}
+
+\section*{1. Data Products}
+\begin{itemize}
+\item CMB maps: Planck PR4/NPIPE component-separated I/Q/U (SMICA, SEVEM).
+\item Ancillary: HFI 143/217 GHz hit-count maps (proxy for integration depth).
+\item Foregrounds: Planck 2018 Zodiacal emission model.
+\item Simulations: NPIPE End-to-End (E2E) simulation suite.
+\end{itemize}
+
+\section*{2. Context Template Construction}
+The context template $T_{\rm ctx}$ defines the ``cost'' of the observation.
+\begin{enumerate}
+\item Input: Load Exposure $E(\hat{n})$ and Zodiacal $Z(\hat{n})$ maps.
+\item Rotation: Rotate all maps from Galactic to Ecliptic coordinates to align with the satellite scan topology.
+\item Feature Extraction: Project onto spherical harmonics $Y_{\ell m}$ for $\ell \leq 20$.
+\item Orthogonalization: Regress out beam asymmetries and standard Galactic cut residuals.
+\item Basis Selection: Perform SVD on the design matrix. The leading left-singular vector defines the canonical context vector $c$.
+\end{enumerate}
+
+\section*{3. The Metric ($S_\gamma$)}
+We quantify the ``pinning'' of history by the observer's context using the phase-locking metric:
+\begin{align}
+\Delta \phi_{\ell m} &= \text{arg}(a_{\ell m}^{\rm CMB}) - \text{arg}(a_{\ell m}^{\rm ctx}) \\
+w_{\ell m} &= |a_{\ell m}^{\rm ctx}|
+\end{align}
+Standard $\Lambda$CDM assumes $\phi^{\rm CMB} \sim U(-\pi, \pi)$ independent of $\phi^{\rm ctx}$. The Causal Evolution hypothesis predicts a concentration of $\Delta \phi$ around 0 (or $\pi$) weighted by the intensity of the observation context.
+
+\section*{4. Splits \& Replication}
+\begin{itemize}
+\item Planck Half-Mission A vs. Half-Mission B (temporal split).
+\item Detector splits (DetSet 1 vs DetSet 2).
+\item Frequency cross-checks (100, 143, 217 GHz).
+\item Hold out Half-Mission B as validation.
+\end{itemize}
+
+\section*{5. Simulation Calibration}
+\begin{itemize}
+\item Null suite: 1000 $\Lambda$CDM skies with NPIPE noise properties. Determine $1\sigma, 2\sigma, 3\sigma$ confidence intervals for $S_\gamma$.
+\item Injection suite: Inject signal $a^{\rm obs} = a^{\rm CMB} + \lambda_{\rm true} a^{\rm ctx}$.
+\item Recovery: Verify $S_\gamma$ scales linearly with $\lambda_{\rm true}$ and establish minimum detectable coupling $\lambda_{\rm min}$.
+\end{itemize}
+
+\section*{6. Systematics Triage}
+\begin{itemize}
+\item Coordinate Rotation: Analyze in Galactic coordinates without Ecliptic rotation (should reduce significance).
+\item Beam Asymmetry: Toggle beam orthogonalization step in context builder.
+\item Zodiacal Residuals: Include/exclude Zodi template from basis construction.
+\end{itemize}
+
+\section*{7. Statistical Reporting}
+\begin{itemize}
+\item Primary outcomes: $Z$-score of observed $S_\gamma$ relative to Null Suite.
+\item Bounds: If $|Z| < 2$, place upper limit $\lambda_\gamma < \lambda_{95\%}$.
+\item Detection: Requires $|Z| > 3$ combined and $|Z| > 2$ in both Half-Mission splits.
+\end{itemize}
+
+\section*{8. Expected Sensitivity}
+\begin{itemize}
+\item Planck (Current): Sensitivity to coupling strengths of order $\lambda \sim 10^{-2}$.
+\item LiteBIRD (Future): Sensitivity $\lambda \sim 10^{-3}$ due to improved large-angle polarization stability.
+\end{itemize}
+
+\section*{9. Minimal Stack}
+\begin{itemize}
+\item Python 3.10+, NumPy, Healpy.
+\item \texttt{ledger} repository: \texttt{pbc.context} (templates), \texttt{pbc.stats} (metrics).
+\end{itemize}
+
+\section*{10. Stop-loss Rules}
+\begin{itemize}
+\item If null variance $>30$\% worse than forecast, publish null.
+\item If split signs inconsistent, declare null.
+\item If held-out fails, stop and publish bounds.
+\end{itemize}
+
+\section*{11. Paper Skeleton}
+\begin{enumerate}
+\item Introduction: TE vs. CE distinction.
+\item Data \& Context: Planck scan strategy and Ecliptic geometry.
+\item Methodology: Derivation of $S_\gamma$ from Woodbury update.
+\item Results: Audit of Planck archive.
+\item Sensitivity Analysis: Injection recovery curves.
+\item Conclusion: Constraints on mutability of the past.
+\end{enumerate}
+
+\section*{References}
+\begin{thebibliography}{99}
+
+\bibitem{hewitt2025pbc}
+Hewitt, A.
+Parochial by Construction: Dual Constructions for Cosmological Inference.
+\textit{Draft} (2025).
+
+\bibitem{planck2020npipe}
+Planck Collaboration.
+Planck intermediate results. LVII. Joint Planck LFI and HFI data processing.
+\textit{Astronomy \& Astrophysics} \textbf{643} (2020) A42.
+doi:\href{https://doi.org/10.1051/0004-6361/202038073}{10.1051/0004-6361/202038073}.
+
+\end{thebibliography}
+
+\end{document}

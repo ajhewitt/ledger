@@ -1,3 +1,9 @@
+# Data (Keep the structure, ignore the heavy files)
+data/raw/*
+data/processed/*
+!data/processed/.gitkeep
+artifacts/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ledger"
+version = "0.1.0"
+description = "Parochial by Construction cosmology framework"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+  {name = "Alastair Hewitt"}
+]
+dependencies = [
+    "numpy>=1.20",
+    "healpy",
+    "tqdm",
+    "pyyaml"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff"
+]
+science = [
+    "namaster"  # Optional: install via conda if pip fails
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
