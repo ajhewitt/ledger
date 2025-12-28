@@ -21,6 +21,7 @@ If the universe behaves according to standard General Relativity, the Record and
 This repository targets the diagnostics defined in *Parochial by Construction: Dual Constructions for Cosmological Inference* [Draft, 2025].
 
 * **P1 (Polarization Phase-Locking):** Tests if primordial CMB polarization phases ($\phi_{TE/EE}$) align with the anisotropy of the Planck scan strategy.
+* **P5 (Target Selection Commutator):** Uses DESI `altmtl` realizations to test if target selection bookkeeping commutes with clustering inference.
 * **P6 (Field Variance):** (Upcoming) Tests for context-dependent variance in JWST galaxy number counts.
 
 ## 3. Repository Structure
