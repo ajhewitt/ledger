@@ -23,6 +23,8 @@ The current ledger shows a **Cosmic Decoherence** trend: high context-coupling i
 | **P6** | **Deep Field (JWST)** | Field Variance | **~83.88 σ** | **FIELD-LOCKED** |
 | **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **BALANCED (NULL)** |
 
+![Context-Coupling Decoherence](docs/final_ledger_decoherence.png)
+
 ### 2.1 Track Summaries
 * **P1 (Primordial Phase-Lock):** While the raw signal appeared as high as 20 σ, the **Half-Ring Difference (HRD)** audit isolated a robust **15 σ** residual. This represents a physical coupling between the primordial polarization record and the satellite's scanning path, a primary signature of the "Axis of Evil".
 * **P6 (Structuring Variance):** Initial audits showed extreme artifacts (271 σ) due to survey edge effects. Implementing a **Mask-Aware** grid revealed a true physical significance of **83.88 σ**. This suggests that at high redshifts ($z ∼ 4.5$), the observed galaxy density is still tightly coupled to the observer's chosen field window.
