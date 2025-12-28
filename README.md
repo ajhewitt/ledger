@@ -23,11 +23,10 @@ The current ledger shows a **Cosmic Decoherence** trend: high context-coupling i
 | **P6** | **Deep Field (JWST)** | Field Variance | **~83.88 σ** | **FIELD-LOCKED** |
 | **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **BALANCED (NULL)** |
 
-
 ### 2.1 Track Summaries
-* ** P1 (Primordial Phase-Lock):** While the raw signal appeared as high as $20\sigma$, the **Half-Ring Difference (HRD)** audit isolated a robust **$15\sigma$** residual. This represents a physical coupling between the primordial polarization record and the satellite's scanning path, a primary signature of the "Axis of Evil".
-* ** P6 (Structuring Variance):** Initial audits showed extreme artifacts ($271\sigma$) due to survey edge effects. Implementing a **Mask-Aware** grid revealed a true physical significance of **$83.88\sigma$**. This suggests that at high redshifts ($z ∼ 4.5$), the observed galaxy density is still tightly coupled to the observer's chosen field window.
-* ** P5 (Late-Time Balance):** In the local universe ($z ∼ 0.7$), the ledger is effectively balanced. The context-coupling signal vanishes to **$1.43\sigma$**, indicating that the "Record" has decoupled from the observer's frame and now behaves as an independent territory.
+* **P1 (Primordial Phase-Lock):** While the raw signal appeared as high as $20\sigma$, the **Half-Ring Difference (HRD)** audit isolated a robust **$15\sigma$** residual. This represents a physical coupling between the primordial polarization record and the satellite's scanning path, a primary signature of the "Axis of Evil".
+* **P6 (Structuring Variance):** Initial audits showed extreme artifacts ($271\sigma$) due to survey edge effects. Implementing a **Mask-Aware** grid revealed a true physical significance of **$83.88\sigma$**. This suggests that at high redshifts ($z ∼ 4.5$), the observed galaxy density is still tightly coupled to the observer's chosen field window.
+* **P5 (Late-Time Balance):** In the local universe ($z ∼ 0.7$), the ledger is effectively balanced. The context-coupling signal vanishes to **$1.43\sigma$**, indicating that the "Record" has decoupled from the observer's frame and now behaves as an independent territory.
 
 ## 3. Repository Structure
 
