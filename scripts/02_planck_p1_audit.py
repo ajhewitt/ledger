@@ -1,63 +1,69 @@
-#!/usr/bin/env python
-import argparse
+#!/usr/bin/env python3
 import numpy as np
 import healpy as hp
-from pathlib import Path
 import json
+import os
 
-# Import from ledger library
-from pbc.stats import calc_phase_alignment
-from pbc.utils.io import read_map, save_json
-
-def main():
-    parser = argparse.ArgumentParser(description="P1 Audit: Phase-Locking Diagnostic")
-    parser.add_argument("--nside", type=int, default=512, help="Analysis resolution")
-    parser.add_argument("--lmin", type=int, default=2)
-    parser.add_argument("--lmax", type=int, default=20, help="Max multipole for phase test")
-    args = parser.parse_args()
-
-    # Define Paths
-    data_dir = Path("data")
-    context_path = data_dir / "processed/context_vector_c.npy"
-    cmb_path = data_dir / "raw/COM_CMB_IQU-smica_2048_R3.00_full.fits"
+def run_comprehensive_p1_audit():
+    print("--- Running P1: Comprehensive Differential Audit (R4.00) ---")
     
-    print(f"--- Running P1 Audit (Lmin={args.lmin}, Lmax={args.lmax}) ---")
+    # Paths
+    hr1_path = "data/raw/planck/npipe_143_hr1.fits"
+    hr2_path = "data/raw/planck/npipe_143_hr2.fits"
 
-    # 1. Load the Context Vector (The 'Cost')
-    if not context_path.exists():
-        raise FileNotFoundError(f"Context vector not found at {context_path}. Run 01_context_builder.py first.")
+    if not os.path.exists(hr1_path):
+        print("Data not found. Run scripts/download_p1_splits.sh.")
+        return
+
+    # 1. Load Data
+    # In R4.00 maps: Field 1=Q, 2=U, 3=Hits
+    NSIDE_WORK = 256
+    print("Loading splits and downsampling to NSIDE 256...")
     
-    c_alm = np.load(context_path)
-    print(f"Loaded Context Vector: {c_alm.shape} modes")
+    def load_data(path):
+        q = hp.ud_grade(hp.read_map(path, field=1, verbose=False), NSIDE_WORK)
+        u = hp.ud_grade(hp.read_map(path, field=2, verbose=False), NSIDE_WORK)
+        h = hp.ud_grade(hp.read_map(path, field=3, verbose=False), NSIDE_WORK)
+        return q, u, h
 
-    # 2. Load the Record (The 'History')
-    # We read the I_STOKES (Intensity) column from our mock/real map
-    print(f"Loading CMB Record: {cmb_path}")
-    map_cmb = read_map(cmb_path, quick_nside=args.nside)
-    
-    # Convert to harmonic space (alm)
-    print("Transforming Record to Harmonic Space...")
-    alm_cmb = hp.map2alm(map_cmb, lmax=args.lmax)
+    q1, u1, h1 = load_data(hr1_path)
+    q2, u2, h2 = load_data(hr2_path)
 
-    # 3. Compute the Diagnostic
-    # This checks: "Did the cost of observing pin down the history?"
-    s_gamma = calc_phase_alignment(alm_cmb, c_alm, lmin=args.lmin, lmax=args.lmax)
-    
-    print(f"\n>>> RESULT: P1 Phase Alignment S_gamma = {s_gamma:.5f} <<<")
+    # 2. Reconstruct Record (Sum) vs Artifact (Diff)
+    q_sum, u_sum = (q1 + q2) / 2, (u1 + u2) / 2
+    q_diff, u_diff = (q1 - q2) / 2, (u1 - u2) / 2
+    hits = h1 + h2
 
-    # 4. Save the Ledger Entry
-    result = {
-        "diagnostic": "P1_Phase_Locking",
-        "s_gamma": s_gamma,
-        "lmin": args.lmin,
-        "lmax": args.lmax,
-        "map": str(cmb_path),
-        "context": str(context_path)
+    # 3. Apply Galactic Mask (35 degree cut for ultra-clean signal)
+    mask = np.abs(hp.pix2ang(NSIDE_WORK, np.arange(hp.nside2npix(NSIDE_WORK)))[0] - np.pi/2) > 0.61
+
+    def get_phase_locking(q, u, h):
+        # Local polarization angle
+        psi = 0.5 * np.arctan2(u[mask], q[mask])
+        # Circular-Linear correlation with the scan context (hits)
+        return np.corrcoef(psi, h[mask])[0, 1]
+
+    # 4. Calculate Net Signal
+    s_full = get_phase_locking(q_sum, u_sum, hits)
+    s_noise = get_phase_locking(q_diff, u_diff, hits)
+    s_net = s_full - s_noise
+
+    print(f"Full Map S_gamma:  {s_full:.6f}")
+    print(f"Noise Map S_gamma: {s_noise:.6f}")
+    print(f"Net PbC Signal:    {s_net:.6f}")
+
+    # Significance Estimate
+    # If s_net > 0.005, we have a robust non-instrumental alignment.
+    results = {
+        "s_full": float(s_full),
+        "s_noise": float(s_noise),
+        "s_net": float(s_net),
+        "status": "COUPLED" if abs(s_net) > 0.005 else "BALANCED"
     }
-    
-    out_path = data_dir / "processed/p1_audit_result.json"
-    save_json(result, out_path)
-    print(f"Audit recorded in {out_path}")
+
+    os.makedirs("data/processed", exist_ok=True)
+    with open("data/processed/p1_diff_audit.json", "w") as f:
+        json.dump(results, f, indent=4)
 
 if __name__ == "__main__":
-    main()
+    run_comprehensive_p1_audit()

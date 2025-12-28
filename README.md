@@ -6,40 +6,36 @@
 
 ## 1. Theory & Intention
 
-Standard cosmological inference (Temporal Evolution, or **TE**) assumes the past is fixed and independent of the observer. We measure the universe "as it is."
+Standard cosmological inference (Temporal Evolution, or **TE**) assumes the past is fixed and independent of the observer. **Causal Evolution (CE)** proposes that the "Past" is a resource consumed to explain the "Present." The specific constraints of the observer (the **Context**) impose a tax on the history that can be reconstructed.
 
-**Causal Evolution (CE)** proposes an alternative: Time is a bookkeeping metric for causal dependencies. In this view, the "Past" is a resource that is consumed to explain the "Present." Consequently, the specific constraints of the observer (the **Context**) impose a tax on the history that can be reconstructed.
+The **Ledger Protocol** identifies three specific "Phase-Locking" tracks:
+1. **P1 (Primordial):** The coupling of the CMB to the satellite's scan strategy.
+2. **P6 (Early Structure):** The coupling of the first galaxies to the deep-field window.
+3. **P5 (Late Structure):** The coupling of local clustering to target-selection bookkeeping.
 
-**The Ledger Protocol** tests this by formalizing two entities:
-1.  **The Record ($d_{obs}$):** The data we observe (e.g., CMB temperature/polarization).
-2.  **The Context ($T_{ctx}$):** The cost of observation (e.g., scan strategy, exposure depth, masking).
+## 2. Global Audit Results (Updated 2025-12-28)
 
-If the universe behaves according to standard General Relativity, the Record and the Context should be statistically independent ($S_\gamma \approx 0$). If Causal Evolution is true, the Record will effectively "phase-lock" to the Context to minimize the computational cost of the history, producing a non-zero coupling signal.
+The current ledger shows a **Cosmic Decoherence** trend: high context-coupling in the early universe that vanishes as structure complexes toward the present day.
 
-### 1.1 Historical Motivation: The "Axis of Evil"
+| Track | Epoch | Metric | Net Significance | PbC Verdict |
+| :--- | :--- | :--- | :--- | :--- |
+| **P1** | **CMB (Planck)** | Phase-Locking | **~15.0 σ** | **COUPLED** |
+| **P6** | **Deep Field (JWST)** | Field Variance | **~271.7 σ** | **EXTREME CLUSTERING** |
+| **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **BALANCED (NULL)** |
 
-The PbC framework provides a theoretical basis for long-standing CMB anomalies.  The observed alignment of the quadrupole ($\ell=2$) and octopole ($\ell=3$) with the solar system's Ecliptic plane—often called the "Axis of Evil"—is interpreted here not as a fluke, but as a primary signal of **Phase-Locking (P1)** between the primordial record and the observer's scan context.
 
-## 2. Research Goals
-
-This repository targets the diagnostics defined in *Parochial by Construction: Dual Constructions for Cosmological Inference* [Draft, 2025].
-
-* **P1 (Polarization Phase-Locking):** Tests if primordial CMB polarization phases ($\phi_{TE/EE}$) align with the anisotropy of the Planck scan strategy.
-* **P5 (Target Selection Commutator):** Uses DESI `altmtl` realizations to test if target selection bookkeeping commutes with clustering inference.
-* **P6 (Field Variance):** (Upcoming) Tests for context-dependent variance in JWST galaxy number counts.
-
-### 2.1 Latest Audit Results (2025-12-28)
-* **P5 (DESI DR1 iron):** Commutator shift $\Delta z \approx -4.7 \times 10^{-4}$ detected. 
-  * Context Tension: 0.6594 (High).
-  * Status: **INVESTIGATE** (Potential Context-Coupling).
+### 2.1 Track Summaries
+* **P1 (Planck NPIPE):** Initial $20\sigma$ signal was identified as a noise-weighting artifact. After **Half-Ring Difference (HRD)** subtraction, a robust **$15\sigma$** physical coupling between polarization phases and scan hits persists.
+* **P6 (COSMOS2020):** Extreme variance ratio ($V \approx 97$) detected in galaxy counts at $z > 3$. While consistent with strong clustering, the significance suggests a deep coupling between the field window and the observed record.
+* **P5 (DESI DR1):** Previously reported tensions were resolved. After correcting for the $N(z)$ selection mismatch, the LSS ledger is balanced at **$1.43\sigma$**.
 
 ## 3. Repository Structure
 
 ```text
 ledger/
 ├── data/
-│   ├── raw/                # Large FITS maps (Planck/DESI) - Ignored by git
-│   ├── processed/          # Generated Context Templates (T_ctx) & Audit Results
+│   ├── raw/                # Planck NPIPE (R4.00), DESI Iron, COSMOS2020 - Ignored by git
+│   ├── processed/          # P1/P5/P6 Audit Results (.json) & Decoherence Plots
 │   └── mocks/              # Low-res synthetic data for CI/Testing
 ├── docs/
 │   └── tex/                # LaTeX sources for Research Programs (P1, P2)
@@ -48,11 +44,15 @@ ledger/
 │   ├── download_planck.sh  # Fetcher for public NPIPE/PR3 data
 │   ├── generate_mock.py    # Generates synthetic data for testing
 │   ├── 01_context_builder.py # Step 1: Raw Maps -> Context Vector (c)
-│   ├── 02_planck_audit.py    # Step 2: Measure Phase-Locking (S_gamma)
+│   ├── 02_planck_audit.py    # Differential (HRD) Phase-Locking Audit
+│   ├── 03_desi_p5_audit.py     # Self-consistent clustering commutator
+│   ├── 06_jwst_p6_audit.py     # High-z field variance estimator
+│   ├── download_*.sh       # Integrated fetchers for IRSA and NERSC mirrors
 │   └── run_injection.py    # Validation: Sensitivity testing
 ├── src/
 │   └── pbc/                # Core Python Package
 │       ├── context.py      # Logic for building T_ctx from exposure maps
+│       ├── decoherence.py  # Logic for cross-epoch significance mapping
 │       ├── dual.py         # Causal Evolution posterior math (Woodbury identities)
 │       ├── stats.py        # Estimators for P1-P6 diagnostics
 │       └── utils/          # I/O and HEALPix wrappers

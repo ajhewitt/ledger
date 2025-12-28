@@ -1,5 +1,4 @@
 #!/bin/bash
-# scripts/download_planck.sh
 
 # Ensure directory exists
 mkdir -p data/raw
