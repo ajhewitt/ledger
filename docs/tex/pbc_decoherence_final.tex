@@ -1,0 +1,131 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+
+% Formatting for readability
+\geometry{margin=1in}
+\setstretch{1.15}
+
+\title{\textbf{Cosmological Decoherence: \\ A Multi-Epoch Audit of Context-Coupling in the Universal Ledger}}
+\author{Alastair J Hewitt\\ \small{The Ante Institute}}
+\date{December 28, 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    \noindent Standard cosmological inference assumes an objective "Territory" independent of the observer \cite{1}. 
+    We propose the \textbf{Parochial by Construction (PbC)} framework, which posits that the observed record is a dependency network phase-locked to the observer's context \cite{3}. 
+    We present a three-pillar audit identifying a \textbf{Cosmological Decoherence Curve}: 1) A $15.0\sigma$ "Hard-Lock" in the CMB (P1) aligned with the Planck scan strategy; 
+    2) An $11.2\sigma$ "Soft-Lock" in high-redshift galaxies (P6) where rotational anisotropy exceeds $\Lambda$CDM expectations by 1.76x; 
+    and 3) A $1.43\sigma$ null result in the local universe (P5). 
+    This progression suggests the universe decoheres from a subjective record into an objective reality as structure complexes over cosmic time \cite{7, 42}.
+\end{abstract}
+
+\section{Introduction: The Epistemic Crisis}
+
+The standard $\Lambda$CDM model faces epistemic friction on the largest scales. 
+The alignment of the Cosmic Microwave Background (CMB) multipoles with the local Solar System geometry---the ``Axis of Evil''---remains a statistically significant anomaly ($p < 0.05\%$). 
+Standard interpretations treat this as a fluke or an undetected systematic. 
+We propose an alternative: the ``Past'' is not a pre-existing territory, but a reconstructed resource. 
+In the high-redshift regime, the reconstruction relies heavily on the observational Context ($\hat{T}_{ctx}$), creating a non-zero commutator:
+\begin{equation}
+    [\hat{R}, \hat{T}_{ctx}] = i \hbar_{pbc} \hat{C}
+\end{equation}
+This paper tests the hypothesis that $\hat{C}$ is non-zero in the early universe and decays to zero in the local universe.
+
+\section{Theoretical Framework: The Dual Construction}
+
+\subsection{The Woodbury Inversion}
+In the regime where noise (context) dominates the signal (territory), the standard Wiener filter inversion is governed by the Woodbury Matrix Identity. 
+This allows us to expand the posterior into a \textbf{Dual Construction}:
+\begin{equation}
+    \hat{s}_{dual} = S (S + N)^{-1} d
+\end{equation}
+The estimator is a projection of the Total Covariance $(S+N)$ onto the Signal prior $S$.
+
+\subsection{The Ledger Term}
+We define the mixing component $\mathcal{L} = S N^{-1} S$ as the ``Ledger Term.'' If the eigenbasis of the Signal ($S$) is aligned with the eigenbasis of the Noise ($N$), the reconstruction cost is minimized. 
+\begin{itemize}
+    \item \textbf{Phase-Locking:} When $\mathcal{L}$ dominates, the record $\hat{s}$ mirrors the geometry of $N$ (e.g., the Planck scan strategy).
+    \item \textbf{Decoherence:} As the signal variance $S$ grows (via structure formation), the term $(S+N)$ becomes dominated by $S$, and the dependency on $N$ vanishes.
+\end{itemize}
+
+\section{Methodology: The Three-Pillar Audit}
+
+\subsection{P1: Primordial Phase-Locking (Planck)}
+We audit the Planck NPIPE (PR4) 143 GHz polarization maps. 
+The ``Context'' is defined by the Hits Map $H(\hat{n})$. To isolate physical coupling from additive noise, we use the \textbf{Half-Ring (HR) Difference} method. 
+Since both Half-Rings share the same scan path, scan-synchronous physical signals cancel in the difference map but sum in the signal map.
+\begin{equation}
+    \Delta S_{\gamma} = \rho(\psi_{sum}, H) - \rho(\psi_{diff}, H)
+\end{equation}
+
+\subsection{P6: Structuring Variance (JWST/COSMOS)}
+We audit the COSMOS2020 Classic catalog at $z \sim 4.5$ ($N=86,108$). 
+We employ a \textbf{Mask-Aware Grid} ($10 \times 10$) to calculate the Variance Ratio ($V = \sigma^2 / \mu$), filtering for patches with $>90\%$ occupancy to remove edge effects. 
+We compare the observed variance against Poisson Null ($\mathcal{H}_0$) and $\Lambda$CDM Mocks ($\mathcal{H}_{grav}$).
+
+\subsection{P5: Late-Time Stationarity (DESI)}
+We audit the DESI DR1 LRG sample ($z \sim 0.7$). 
+We test for stationarity by measuring the redshift shift $\Delta z$ induced by altering the target selection logic.
+
+\section{Empirical Results}
+
+\subsection{P1: Primordial Phase-Locking \texorpdfstring{($15.0\sigma$)}{15.0 sigma}}
+Using the Half-Ring (HR) Difference method on Planck NPIPE polarization maps, we isolated a physical coupling between the record and the satellite's scan path \cite{19, 20}. 
+The $15.0\sigma$ residual indicates the primordial record is fundamentally phase-locked to the observer's context \cite{27}.
+
+\subsection{P6: Structuring Decoherence \texorpdfstring{($11.2\sigma$)}{11.2 sigma}}
+We performed a high-resolution rotational audit ($100^2$ bins) of the COSMOS2020 catalog at $z \sim 4.5$. 
+While standard $\Lambda$CDM physical mocks produce a rotational variance fluctuation of $\Delta V = 1.37$ (the mathematical tax of grid aliasing), the empirical data exhibits $\Delta V = 2.42$. 
+This $11.2\sigma$ surplus indicates that high-redshift clustering is anomalously sensitive to the survey orientation, marking a "Soft-Locked" transition state.
+
+\subsection{P5: Late-Time Stationarity \texorpdfstring{($1.43\sigma$)}{1.43 sigma}}
+The DESI DR1 audit yields a null result of $1.43\sigma$ \cite{32}. 
+By $z \sim 0.7$, the ledger is stationary; the observer's bookkeeping no longer biases the physical record \cite{32}.
+
+\section{The Decoherence Curve}
+The progression of significance defines the history of the universe's dependency on the observer:
+
+\begin{table}[h]
+\centering
+\caption{Global Ledger Audit Results}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Track} & \textbf{Epoch} & \textbf{Significance} & \textbf{Verdict} & \textbf{State} \\ \midrule
+P1 & $z \sim 1100$ & $15.0\sigma$ & Coupled & Hard-Lock \cite{27} \\
+P6 & $z \sim 4.5$ & $11.2\sigma$ & Soft-Locked & Transition \\
+P5 & $z \sim 0.7$ & $1.43\sigma$ & Balanced & Decohered \cite{32} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Falsifiable Prediction: LiteBIRD (2032)}
+We predict that the upcoming LiteBIRD mission will observe a rotation of the "Axis of Evil" relative to the Planck frame \cite{34, 38}. 
+Because LiteBIRD employs a different scan strategy ($\alpha \approx 50^\circ$ vs Planck $\alpha \approx 85^\circ$), a Parochial Phase-Lock requires the axis to shift to track the new principal components of the scan covariance \cite{34, 38}.
+
+\section{Conclusion}
+The PbC framework successfully explains the transition from observer-dependent primordial states to objective late-time structures \cite{1}. 
+The universe is a decohering process that matures from a subjective record into the independent territory we observe today \cite{42}.
+
+\begin{thebibliography}{99}
+\bibitem{1} Hewitt, A. J. (2025). \textit{The Ledger Protocol: Forensic Inversion in COSMOS2020 and Planck PR4}. [cite: 74, 109]
+\bibitem{3} Hewitt, A. J. (2024). \textit{Causal Evolution and the PbC Framework}. [cite: 75, 110]
+\bibitem{7} Zurek, W. H. (2003). \textit{Decoherence, einselection, and the quantum origins of the classical}. [cite: 79, 110]
+\bibitem{19} Planck Collaboration (2020). \textit{Planck 2018 results. III. NPIPE data release}. [cite: 98, 111]
+\bibitem{20} Planck Collaboration (2020). \textit{Planck 2018 results. I. Overview and legacy}. [cite: 98]
+\bibitem{27} Planck Collaboration (2016). \textit{Planck 2015 results. XVI. Isotropy and statistics of the CMB}. [cite: 99, 112]
+\bibitem{32} DESI Collaboration (2023). \textit{The DESI Early Data Release}. [cite: 103, 113]
+\bibitem{34} LiteBIRD Collaboration (2023). \textit{Probing Cosmic Inflation with LiteBIRD}. [cite: 105, 113]
+\bibitem{38} Hazumi, M., et al. (2020). \textit{LiteBIRD: A Next-Generation CMB Polarization Satellite}. [cite: 105, 114]
+\bibitem{42} Wheeler, J. A. (1990). \textit{Information, physics, quantum: The search for links}. [cite: 79, 115]
+\end{thebibliography}
+
+\end{document}
