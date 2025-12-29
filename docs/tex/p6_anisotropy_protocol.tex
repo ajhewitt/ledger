@@ -1,0 +1,89 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{setspace}
+
+\geometry{margin=1in}
+\setstretch{1.15}
+
+\title{\textbf{Program P6-B: The Anisotropy and Alignment Audit} \\ \large{Distinguishing Gravitational Clustering from Parochial Phase-Locking}}
+\author{The Ledger Project}
+\date{December 28, 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Program P6-A confirmed high-significance clustering ($V \approx 13.9, \Sigma \approx 72\sigma$) in the $z \sim 4.5$ galaxy field. However, this scalar metric cannot distinguish between isotropic gravitational collapse ($\Lambda$CDM) and anisotropic context-coupling (PbC). This protocol defines the methodology for \textbf{Program P6-B}, which utilizes rotational symmetry breaking and gradient alignment to audit the geometric relationship between the Record (Galaxies) and the Context (Window Function).
+\end{abstract}
+
+\section{Theoretical Motivation}
+
+We test two competing hypotheses regarding the origin of the observed variance:
+\begin{itemize}
+    \item \textbf{Null Hypothesis ($\mathcal{H}_{grav}$):} The clustering is physical and isotropic. The correlation function $\xi(r)$ depends only on separation distance $r$. Rotating the observational window relative to the field should not significantly alter the global variance statistics.
+    \item \textbf{PbC Hypothesis ($\mathcal{H}_{pbc}$):} The clustering is anisotropic and phase-locked to the observer's constraints. The density field $\delta(\mathbf{x})$ is maximized along the principal axes of the window function $W(\mathbf{x})$. Rotating the window breaks this lock, causing the variance to collapse.
+\end{itemize}
+
+\section{Phase 1: The Rotational Null Test (Scalar)}
+
+This is the primary discriminator. We measure the stability of the Variance Ratio $V$ under coordinate transformation.
+
+\subsection{Methodology}
+1.  \textbf{Coordinate Rotation:} We apply a rotation matrix $R(\theta)$ to the galaxy coordinates $(\alpha, \delta)$ relative to the field center $(\alpha_0, \delta_0)$:
+    \begin{equation}
+        \begin{bmatrix} \alpha' \\ \delta' \end{bmatrix} = \begin{bmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{bmatrix} \begin{bmatrix} \alpha - \alpha_0 \\ \delta - \delta_0 \end{bmatrix} + \begin{bmatrix} \alpha_0 \\ \delta_0 \end{bmatrix}
+    \end{equation}
+2.  \textbf{Fixed Mask:} The occupancy grid $O_{ij}$ (representing the telescope window) remains fixed in the laboratory frame.
+3.  \textbf{Audit Sweep:} We vary $\theta$ from $0^\circ$ to $90^\circ$ in steps of $\Delta \theta = 5^\circ$.
+
+\subsection{Success Criteria}
+We define the \textbf{Anisotropy Parameter} $\mathcal{A}$:
+\begin{equation}
+    \mathcal{A} = \frac{V(\theta=0^\circ) - \langle V(\theta \neq 0^\circ) \rangle}{\sigma_{boot}}
+\end{equation}
+\begin{itemize}
+    \item If $\mathcal{A} \approx 0$: The structure is Isotropic (Gravity).
+    \item If $\mathcal{A} > 3$: The structure is Anisotropic and aligned with the window (PbC Lock).
+\end{itemize}
+
+\section{Phase 2: Gradient Alignment Audit (Vector)}
+
+We test if the local density gradients are streaming along the detector boundaries.
+
+\subsection{Methodology}
+1.  \textbf{Density Gradient ($\nabla \delta$):} For each patch $(i,j)$, we compute the gradient of the galaxy count field using a Sobel operator.
+2.  \textbf{Window Gradient ($\nabla W$):} We compute the gradient of the occupancy mask (which is non-zero only at the edges/gaps).
+3.  \textbf{Alignment Angle:} We calculate the cosine similarity for all boundary patches:
+    \begin{equation}
+        \mu_{ij} = \frac{\nabla \delta \cdot \nabla W}{|\nabla \delta| |\nabla W|}
+    \end{equation}
+
+\subsection{Interpretation}
+We analyze the distribution $P(\mu)$.
+\begin{itemize}
+    \item \textbf{Random:} $P(\mu)$ is uniform. Galaxies cross window boundaries randomly.
+    \item \textbf{Locked:} $P(\mu)$ peaks at $\pm 1$ (Parallel) or $0$ (Perpendicular). This implies the density field is geometrically constrained by the observation limits.
+\end{itemize}
+
+\section{Phase 3: Global Axis Lock (Eigenbasis)}
+
+We perform a global check for the ``Axis of Evil'' at $z \sim 4.5$.
+
+\subsection{Methodology}
+1.  \textbf{Galaxy Tensor:} Compute the moment of inertia tensor $I_g$ for the galaxy distribution on the sky.
+2.  \textbf{Window Tensor:} Compute the moment of inertia tensor $I_w$ for the survey mask.
+3.  \textbf{Eigen-Decomposition:} Extract the principal eigenvectors $\mathbf{v}_g$ and $\mathbf{v}_w$ corresponding to the largest eigenvalues.
+4.  \textbf{Misalignment Angle:} $\Psi = \arccos | \mathbf{v}_g \cdot \mathbf{v}_w |$.
+
+\subsection{Implication}
+If $\Psi < 5^\circ$, the large-scale structure of the early universe is perfectly aligned with the orientation of the COSMOS camera, mirroring the CMB multipole alignment (P1).
+
+\section{Execution Plan}
+The code \texttt{scripts/p6\_rotation\_audit.py} will implement Phase 1 immediately, as it requires no new derived data products. Phases 2 and 3 will be implemented if Phase 1 yields $\mathcal{A} > 3$.
+
+\end{document}

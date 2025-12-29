@@ -15,20 +15,21 @@ The **Ledger Protocol** identifies three specific "Phase-Locking" tracks:
 
 ## 2. Global Audit Results (Updated 2025-12-28)
 
-The current ledger shows a **Cosmic Decoherence** trend: high context-coupling in the early universe that vanishes as structure complexes toward the present day.
+The ledger reveals a statistically significant **Decoherence Gradient**. The universe begins in a state of "Hard-Lock" and evolves toward an "Objective Territory".
 
 | Track | Epoch | Metric | Net Significance | PbC Verdict |
 | :--- | :--- | :--- | :--- | :--- |
-| **P1** | **CMB (Planck)** | Phase-Locking | **~15.0 σ** | **COUPLED** |
-| **P6** | **Deep Field (JWST)** | Field Variance | **~83.88 σ** | **FIELD-LOCKED** |
-| **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **BALANCED (NULL)** |
+| **P1** | **CMB (Planck)** | Phase-Locking | **~15.0 σ**| **HARD-LOCKED** |
+| **P6** | **Deep Field (JWST)** | Rotational Surplus | **11.2 σ** | **SOFT-LOCKED** |
+| **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **DECOHERED** |
 
 ![Context-Coupling Decoherence](docs/final_ledger_decoherence.png)
 
 ### 2.1 Track Summaries
-* **P1 (Primordial Phase-Lock):** While the raw signal appeared as high as 20 σ, the **Half-Ring Difference (HRD)** audit isolated a robust **15 σ** residual. This represents a physical coupling between the primordial polarization record and the satellite's scanning path, a primary signature of the "Axis of Evil".
-* **P6 (Structuring Variance):** Initial audits showed extreme artifacts (271 σ) due to survey edge effects. Implementing a **Mask-Aware** grid revealed a true physical significance of **83.88 σ**. This suggests that at high redshifts ($z ∼ 4.5$), the observed galaxy density is still tightly coupled to the observer's chosen field window.
-* **P5 (Late-Time Balance):** In the local universe ($z ∼ 0.7$), the ledger is effectively balanced. The context-coupling signal vanishes to **1.43 σ**, indicating that the "Record" has decoupled from the observer's frame and now behaves as an independent territory.
+
+* **P1 (Primordial Phase-Lock):** Represents a physical coupling between the primordial record and the satellite's scanning path.
+* **P6 (Structuring Decoherence):** A high-resolution audit confirms that the galaxy distribution at $z \sim 4.5$ is 2.2x more sensitive to grid rotation than random noise. This indicates a residual phase-lock where structure remains coupled to the survey geometry.
+* **P5 (Late-Time Stationarity):** In the local universe ($z \sim 0.7$), the ledger is balanced. The 1.43σ result indicates the record has fully decoupled from the observer's frame.
 
 ## 3. Repository Structure
 
