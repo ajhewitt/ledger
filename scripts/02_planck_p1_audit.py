@@ -1,69 +1,74 @@
-#!/usr/bin/env python3
 import numpy as np
 import healpy as hp
-import json
 import os
+from scipy.stats import pearsonr
 
-def run_comprehensive_p1_audit():
-    print("--- Running P1: Comprehensive Differential Audit (R4.00) ---")
+# CONFIG
+# Matches your download_planck_p1.sh paths
+PLANCK_MAP_PATH = 'data/raw/planck/npipe_143.fits' 
+HITS_MAP_PATH = 'data/raw/planck/npipe_hits.fits'
+
+def robust_p1_audit():
+    print(f"--- STARTING P1 AUDIT (Dipole-Corrected) ---")
     
-    # Paths
-    hr1_path = "data/raw/planck/npipe_143_hr1.fits"
-    hr2_path = "data/raw/planck/npipe_143_hr2.fits"
-
-    if not os.path.exists(hr1_path):
-        print("Data not found. Run scripts/download_p1_splits.sh.")
+    if not os.path.exists(PLANCK_MAP_PATH):
+        print(f"ERROR: File not found at {PLANCK_MAP_PATH}")
+        print("Run 'bash scripts/download_planck_p1.sh' first.")
         return
 
-    # 1. Load Data
-    # In R4.00 maps: Field 1=Q, 2=U, 3=Hits
-    NSIDE_WORK = 256
-    print("Loading splits and downsampling to NSIDE 256...")
+    # 1. Load Temperature Map (Field 0)
+    print("1. Loading Planck NPIPE Temperature Map...")
+    # Read field 0 (I), ignore warnings about other fields
+    m = hp.read_map(PLANCK_MAP_PATH, field=0, verbose=False)
+    nside = hp.npix2nside(len(m))
     
-    def load_data(path):
-        q = hp.ud_grade(hp.read_map(path, field=1, verbose=False), NSIDE_WORK)
-        u = hp.ud_grade(hp.read_map(path, field=2, verbose=False), NSIDE_WORK)
-        h = hp.ud_grade(hp.read_map(path, field=3, verbose=False), NSIDE_WORK)
-        return q, u, h
-
-    q1, u1, h1 = load_data(hr1_path)
-    q2, u2, h2 = load_data(hr2_path)
-
-    # 2. Reconstruct Record (Sum) vs Artifact (Diff)
-    q_sum, u_sum = (q1 + q2) / 2, (u1 + u2) / 2
-    q_diff, u_diff = (q1 - q2) / 2, (u1 - u2) / 2
-    hits = h1 + h2
-
-    # 3. Apply Galactic Mask (35 degree cut for ultra-clean signal)
-    mask = np.abs(hp.pix2ang(NSIDE_WORK, np.arange(hp.nside2npix(NSIDE_WORK)))[0] - np.pi/2) > 0.61
-
-    def get_phase_locking(q, u, h):
-        # Local polarization angle
-        psi = 0.5 * np.arctan2(u[mask], q[mask])
-        # Circular-Linear correlation with the scan context (hits)
-        return np.corrcoef(psi, h[mask])[0, 1]
-
-    # 4. Calculate Net Signal
-    s_full = get_phase_locking(q_sum, u_sum, hits)
-    s_noise = get_phase_locking(q_diff, u_diff, hits)
-    s_net = s_full - s_noise
-
-    print(f"Full Map S_gamma:  {s_full:.6f}")
-    print(f"Noise Map S_gamma: {s_noise:.6f}")
-    print(f"Net PbC Signal:    {s_net:.6f}")
-
-    # Significance Estimate
-    # If s_net > 0.005, we have a robust non-instrumental alignment.
-    results = {
-        "s_full": float(s_full),
-        "s_noise": float(s_noise),
-        "s_net": float(s_net),
-        "status": "COUPLED" if abs(s_net) > 0.005 else "BALANCED"
-    }
-
-    os.makedirs("data/processed", exist_ok=True)
-    with open("data/processed/p1_diff_audit.json", "w") as f:
-        json.dump(results, f, indent=4)
+    # 2. Masking the Galaxy (Standard practice)
+    print("2. Masking Galactic Plane (|b| < 20 deg)...")
+    th, ph = hp.pix2ang(nside, np.arange(len(m)))
+    lat = 90 - np.degrees(th)
+    # Create mask: 1 where valid, 0 where masked
+    mask_bool = np.abs(lat) > 20
+    
+    # 3. MONOPOLE & DIPOLE REMOVAL
+    # We copy the map and set masked pixels to UNSEEN so remove_dipole ignores them
+    m_clean = np.copy(m)
+    m_clean[~mask_bool] = hp.UNSEEN
+    
+    print("3. Subtracting Monopole and Dipole (Kinematic Doppler)...")
+    # fitval=True returns (monopole, dipole_vector)
+    # This ensures we are testing the STRUCTURE (l >= 2), not the motion.
+    m_no_dipole = hp.remove_dipole(m_clean, fitval=False, verbose=True)
+    
+    # 4. Load Context (Hits Map)
+    print("4. Loading Scan Strategy (Hits Map)...")
+    hits = hp.read_map(HITS_MAP_PATH, verbose=False)
+    
+    if hp.npix2nside(len(hits)) != nside:
+        print(f"   Resampling Hits map to NSIDE {nside}...")
+        hits = hp.ud_grade(hits, nside)
+        
+    # 5. The Correlation Test
+    # PbC Hypothesis: The Record (R) is coupled to the Context (N).
+    # Since N ~ 1/Hits, we check correlation between |Map| and 1/Hits.
+    
+    # Select only valid pixels
+    valid_idx = np.where(mask_bool)[0]
+    
+    # We look at the magnitude of the signal vs the noise level
+    signal_mag = np.abs(m_no_dipole[valid_idx])
+    noise_inv = 1.0 / (hits[valid_idx] + 1.0) # Proxy for N
+    
+    corr, p_val = pearsonr(signal_mag, noise_inv)
+    
+    print("\n--- RESULTS ---")
+    print(f"Map-Context Correlation: {corr:.5f}")
+    print(f"P-Value:                 {p_val:.5e}")
+    
+    if p_val < 0.05 and abs(corr) > 0.001:
+        print(">> DETECTION: The CMB structure is statistically coupled to the Scan Strategy.")
+        print(">> This supports the PbC 'Phase-Lock' hypothesis.")
+    else:
+        print(">> NULL RESULT: The CMB structure is independent of the Scan Strategy.")
 
 if __name__ == "__main__":
-    run_comprehensive_p1_audit()
+    robust_p1_audit()

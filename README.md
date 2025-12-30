@@ -13,23 +13,18 @@ The **Ledger Protocol** identifies three specific "Phase-Locking" tracks:
 2. **P6 (Early Structure):** The coupling of the first galaxies to the deep-field window.
 3. **P5 (Late Structure):** The coupling of local clustering to target-selection bookkeeping.
 
-## 2. Global Audit Results (Updated 2025-12-28)
+## 2. Global Audit Results (Updated 2025-12-29)
 
-The ledger reveals a statistically significant **Decoherence Gradient**. The universe begins in a state of "Hard-Lock" and evolves toward an "Objective Territory".
-
-| Track | Epoch | Metric | Net Significance | PbC Verdict |
-| :--- | :--- | :--- | :--- | :--- |
-| **P1** | **CMB (Planck)** | Phase-Locking | **~15.0 σ**| **HARD-LOCKED** |
-| **P6** | **Deep Field (JWST)** | Rotational Surplus | **11.2 σ** | **SOFT-LOCKED** |
-| **P5** | **LSS (DESI)** | Commutator $\Delta z$ | **1.43 σ** | **DECOHERED** |
-
-![Context-Coupling Decoherence](docs/final_ledger_decoherence.png)
-
-### 2.1 Track Summaries
-
-* **P1 (Primordial Phase-Lock):** Represents a physical coupling between the primordial record and the satellite's scanning path.
-* **P6 (Structuring Decoherence):** A high-resolution audit confirms that the galaxy distribution at $z \sim 4.5$ is 2.2x more sensitive to grid rotation than random noise. This indicates a residual phase-lock where structure remains coupled to the survey geometry.
-* **P5 (Late-Time Stationarity):** In the local universe ($z \sim 0.7$), the ledger is balanced. The 1.43σ result indicates the record has fully decoupled from the observer's frame.
+1. P1 (Planck): NULL.
+   * Initial Finding: Strong coupling (9.8σ).
+   * Audit: Vanished upon foreground cleaning (1.3σ).
+   * Cause: Solar System foreground contamination (Zodiacal Light).
+2. P6 (COSMOS): NULL.
+   * Initial Finding: Strong rotational anisotropy (11.2σ).
+   * Audit: Vanished upon masking/shuffling.
+   * Cause: Survey window function (Rectangular Grid) aliasing.
+3. P5 (DESI): NULL.
+   * Finding: Consistent with standard ΛCDM stationarity.
 
 ## 3. Repository Structure
 
